@@ -24,13 +24,14 @@ the Interpreter. Type help or ? to list commands.\n'
     def do_extract(self, line):
         options = self.extract_line(line)
         opt = ["f", "d"]
-        print(options)
         if len(options) != 2:
             return print('Valid options not provided. Use "help extract" command')
         if opt.index(options[0].lower()) == -1:
             return print('Please provide valid indicator')
-        if os.path.isfile(options[1]):
-            print('The path provided is not a file!')
+        if options[0].lower() == 'f' and not os.path.isfile(options[1]):
+            return print('The path provided is not a file!')
+        if options[0].lower() == 'd' and not os.path.isdir(options[1]):
+            return print('The path provided is not a directory!!')
         data = []
         if opt.index(options[0].lower()) == "f":
             file_data = FileReader.read_from_file(os.path.abspath(options[1]))
@@ -41,7 +42,7 @@ the Interpreter. Type help or ? to list commands.\n'
         self.extracted_data = self.extract_class_data(data)
 
     def do_view(self, arg=""):
-        if arg.lower() == 'data':
+        if arg.lower() != 'data':
             return print('Valid options not provided. use "help view" command')
         if len(self.extracted_data) == 0:
             return print('No data available to display. Use "extract" command')
