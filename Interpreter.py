@@ -21,9 +21,7 @@ the Interpreter. Type help or ? to list commands.\n'
         self.output_path = new_output_path
         self.db_name = db_name
 
-    # Created By Jignesh
     def do_extract(self, line):
-
         options = self.extract_line(line)
         opt = ["f", "d"]
         print(options)
@@ -42,29 +40,18 @@ the Interpreter. Type help or ? to list commands.\n'
             data = FileReader.read_from_folder(options[1])
         self.extracted_data = self.extract_class_data(data)
 
-
-
-
-    # Created By Suman
     def do_view(self, arg=""):
         if arg.lower() == 'data':
-            if len(self.extracted_data) > 0:
-                for a_class_data in self.extracted_data:
-                    print('Data for ', a_class_data.class_name, ' class.')
-                    print('\tInstance attributes names')
-                    print('\t', a_class_data.instance_attributes)
-                    print('\tInstance method names')
-                    print('\t', a_class_data.instance_methods)
-                    print('\tAssociation Relationship')
-                    print('\t', a_class_data.association)
-                    print('\tInheritance Relationship')
-                    print('\t', a_class_data.inheritance)
-            else:
-                print('No data available to display. Use "extract" command')
-        else:
-            print('Valid options not provided. use "help view" command')
+            return print('Valid options not provided. use "help view" command')
+        if len(self.extracted_data) == 0:
+            return print('No data available to display. Use "extract" command')
+        for a_class_data in self.extracted_data:
+            print('Data for ', a_class_data.class_name, ' class.',
+                  "Instance attributes names ", a_class_data.instance_attributes,
+                  'Instance method names ', a_class_data.instance_methods,
+                  'Association Relationship ', a_class_data.association,
+                  'Inheritance Relationship ', a_class_data.inheritance)
 
-    # Created By Bikrant
     def do_generate(self, arg):
         if arg.lower() != 'c':
             return print('Valid options not provided. Use "help generate" command')
@@ -79,7 +66,6 @@ the Interpreter. Type help or ? to list commands.\n'
             self.output_path = os.path.abspath(self.output_path + '/class.png')
             print("Output file set to: class.png")
 
-    # Created By Jignesh
     def do_get_image(self, line):
         options = self.extract_line(line)
 
@@ -94,7 +80,6 @@ the Interpreter. Type help or ? to list commands.\n'
             self.copy_file(Sql.get_path(options[0]), options[1])
         Sql.disconnect()
 
-    # Created By Jignesh
     def do_store_image(self, line):
         options = self.extract_line(line)
         if len(options) == 2:
@@ -118,7 +103,6 @@ the Interpreter. Type help or ? to list commands.\n'
         else:
             print('Valid option not provide. Use "help store_image" command')
 
-    # Created By Jignesh
     def do_store_data(self, key=None):
         if key is not None:
             if len(self.extracted_data) > 0:
@@ -130,7 +114,6 @@ the Interpreter. Type help or ? to list commands.\n'
         else:
             print('Key not provided. Use "help store_data" command')
 
-    # Created By Jignesh
     def do_get_data(self, key=None):
         if key is not None:
             Storage.open_storage()
@@ -138,7 +121,6 @@ the Interpreter. Type help or ? to list commands.\n'
         else:
             print('Key not provided. Use "help get_data" command')
 
-    # Created By Jignesh
     def do_exit(self, line):
         print('Thank You for using the Interpreter')
         print("Exiting ......")

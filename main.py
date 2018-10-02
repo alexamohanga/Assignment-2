@@ -5,11 +5,11 @@ import os
 
 if __name__ == "__main__":
     argv.append("Alex")
-    # Created by Jignesh
+
     if len(argv) == 2:
         interpreter = Interpreter(argv[1])
         interpreter.cmdloop()
-    # Created by Suman
+
     elif len(argv) == 3:
         if os.path.isdir(argv[2]):
             interpreter = Interpreter(argv[1], argv[2])
@@ -18,7 +18,6 @@ if __name__ == "__main__":
             print('Please provide\
             a valid path to a directory and try again!!!')
 
-    # Created by Bikrant
     elif len(argv) == 4:
         if os.path.isdir(argv[2]):
             if os.path.isfile('./Database/' + argv[3] + '.db'):
