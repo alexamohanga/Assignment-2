@@ -25,26 +25,25 @@ the Interpreter. Type help or ? to list commands.\n'
     def do_extract(self, line):
 
         options = self.extract_line(line)
-        if len(options) == 2:
-            data = []
-            if options[0].lower() == 'f':
-                if os.path.isfile(options[1]):
-                    file_data = \
-                        FileReader.read_from_file(os.path.abspath(options[1]))
-                    if file_data != '':
-                        data.append(file_data)
-                else:
-                    print('The path provided is not a file!!')
-            elif options[0].lower() == 'd':
-                if os.path.isdir(options[1]):
-                    data = FileReader.read_from_folder(options[1])
-                else:
-                    print('The path provided is not a directory!!')
-            else:
-                print('Please provide valid indicator')
-            self.extracted_data = self.extract_class_data(data)
-        else:
-            print('Valid options not provided. Use "help extract" command')
+        opt = ["f", "d"]
+        print(options)
+        if len(options) != 2:
+            return print('Valid options not provided. Use "help extract" command')
+        if opt.index(options[0].lower()) == -1:
+            return print('Please provide valid indicator')
+        if os.path.isfile(options[1]):
+            print('The path provided is not a file!')
+        data = []
+        if opt.index(options[0].lower()) == "f":
+            file_data = FileReader.read_from_file(os.path.abspath(options[1]))
+            if file_data != '':
+                data.append(file_data)
+        elif opt.index(options[0].lower()) == "d":
+            data = FileReader.read_from_folder(options[1])
+        self.extracted_data = self.extract_class_data(data)
+
+
+
 
     # Created By Suman
     def do_view(self, arg=""):
@@ -67,38 +66,33 @@ the Interpreter. Type help or ? to list commands.\n'
 
     # Created By Bikrant
     def do_generate(self, arg):
-        if arg.lower() == 'c':
-            if len(self.extracted_data) > 0:
-                FileWriter.write(self.extracted_data)
-                if self.output_path is None:
-                    self.output_path = \
-                        os.path.abspath('./output/success/class.png')
-                elif self.output_path is not None and \
-                        not self.output_path.endswith('.png'):
-                    self.output_path = \
-                        os.path.abspath(self.output_path + '/class.png')
-                UmlClass.generate(self.output_path)
-            else:
-                print('No data available to generate\
-                diagram. Use "extract" command to extract data first')
-        else:
-            print('Valid options not provided. Use "help generate" command')
+        if arg.lower() != 'c':
+            return print('Valid options not provided. Use "help generate" command')
+        if len(self.extracted_data) == 0:
+            return print('No data available to generate\
+            diagram. Use "extract" command to extract data first')
+        if self.output_path is None:
+            self.output_path = os.path.abspath('./output/success')
+            print("Output directory path set to: ./output/success")
+
+        if not self.output_path.endswith('.png'):
+            self.output_path = os.path.abspath(self.output_path + '/class.png')
+            print("Output file set to: class.png")
 
     # Created By Jignesh
     def do_get_image(self, line):
         options = self.extract_line(line)
-        if len(options) == 2:
-            if os.path.isdir(options[1]):
-                Sql.connect(self.db_name)
-                if Sql.has_file(options[0]):
-                    self.copy_file(Sql.get_path(options[0]), options[1])
-                else:
-                    print('File Not Found in Database')
-                Sql.disconnect()
-            else:
-                print('Please provide a valid Path!!')
+
+        if len(options) != 2:
+            return print('Valid option not provide. Use "help get_image" command')
+        if not os.path.isdir(options[1]):
+            return print('Please provide a valid Path!!')
+        Sql.connect(self.db_name)
+        if not Sql.has_file(options[0]):
+            print('File Not Found in Database')
         else:
-            print('Valid option not provide. Use "help get_image" command')
+            self.copy_file(Sql.get_path(options[0]), options[1])
+        Sql.disconnect()
 
     # Created By Jignesh
     def do_store_image(self, line):
